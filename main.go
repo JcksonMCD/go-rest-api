@@ -51,7 +51,7 @@ func getBookById(id string) (*book, error) {
 func checkoutBook(c *gin.Context) {
 	id, ok := c.GetQuery("id")
 
-	if ok == false {
+	if !ok {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Missing id query parameter."})
 		return
 	}
@@ -89,5 +89,6 @@ func main() {
 	router.GET("/books", getBooks)
 	router.GET("/books/:id", bookById)
 	router.POST("/books", createBook)
+	router.PUT("/checkout", checkoutBook)
 	router.Run("localhost:8080")
 }
