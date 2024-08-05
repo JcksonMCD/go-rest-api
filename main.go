@@ -32,6 +32,7 @@ func bookById(c *gin.Context) {
 
 	if err != nil {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Book not found!"})
+		return
 	}
 
 	c.IndentedJSON(http.StatusOK, book)
@@ -45,6 +46,30 @@ func getBookById(id string) (*book, error) {
 	}
 
 	return nil, errors.New("book not found")
+}
+
+func checkoutBook(c *gin.Context) {
+	id, ok := c.GetQuery("id")
+
+	if ok == false {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Missing id query parameter."})
+		return
+	}
+
+	book, err := getBookById(id)
+
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Book not found!"})
+		return
+	}
+
+	if book.Quantity <= 0 {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Book not available."})
+		return
+	}
+
+	book.Quantity -= 1
+	c.IndentedJSON(http.StatusOK, book)
 }
 
 func createBook(c *gin.Context) {
