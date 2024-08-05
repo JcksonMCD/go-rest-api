@@ -26,6 +26,17 @@ func getBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, books)
 }
 
+func bookById(c *gin.Context) {
+	id := c.Param("id")
+	book, err := getBookById(id)
+
+	if err != nil {
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, book)
+}
+
 func getBookById(id string) (*book, error) {
 	for i, b := range books {
 		if b.ID == id {
