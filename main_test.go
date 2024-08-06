@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -65,4 +66,27 @@ func TestBookById(t *testing.T) {
 	err := json.Unmarshal(w.Body.Bytes(), &responseBook)
 	assert.NoError(t, err)
 	assert.Equal(t, expectedBook, responseBook)
+}
+
+// TestCreateBook tests the /books endpoint for creating a new book
+func TestCreateBook(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.Default()
+	router.POST("/books", createBook)
+
+	newBook := `{"id":"4","title":"The Catcher in the Rye","author":"J.D. Salinger","quantity":3}`
+	req, _ := http.NewRequest(http.MethodPost, "/books", strings.NewReader(newBook))
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusCreated, w.Code)
+
+	var createdBook book
+	err := json.Unmarshal(w.Body.Bytes(), &createdBook)
+	assert.NoError(t, err)
+
+	expectedBook := book{ID: "4", Title: "The Catcher in the Rye", Author: "J.D. Salinger", Quantity: 3}
+	assert.Equal(t, expectedBook, createdBook)
 }
