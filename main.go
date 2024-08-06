@@ -37,6 +37,15 @@ func getBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, books)
 }
 
+// @Summary Get a book by ID
+// @Description Retrieve a specific book by its ID
+// @Tags Books
+// @Accept  json
+// @Produce  json
+// @Param id path string true "Book ID"
+// @Success 200 {object} book
+// @Failure 404 {object} ErrorResponse
+// @Router /books/{id} [get]
 func bookById(c *gin.Context) {
 	id := c.Param("id")
 	book, err := getBookById(id)
