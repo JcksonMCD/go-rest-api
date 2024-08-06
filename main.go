@@ -26,6 +26,13 @@ var books = []book{
 	{ID: "3", Title: "War and Peace", Author: "Leo Tolstoy", Quantity: 6},
 }
 
+// @Summary Get all books
+// @Description Retrieve a list of all books
+// @Tags Books
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} book
+// @Router /books [get]
 func getBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, books)
 }
