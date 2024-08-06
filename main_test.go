@@ -90,3 +90,23 @@ func TestCreateBook(t *testing.T) {
 	expectedBook := book{ID: "4", Title: "The Catcher in the Rye", Author: "J.D. Salinger", Quantity: 3}
 	assert.Equal(t, expectedBook, createdBook)
 }
+
+// TestCheckoutBook tests the /checkout endpoint
+func TestCheckoutBook(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.Default()
+	router.PUT("/checkout", checkoutBook)
+
+	req, _ := http.NewRequest(http.MethodPut, "/checkout?id=1", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	expectedBook := book{ID: "1", Title: "In Search of Lost Time", Author: "Marcel Proust", Quantity: 1}
+
+	var responseBook book
+	err := json.Unmarshal(w.Body.Bytes(), &responseBook)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedBook, responseBook)
+}
