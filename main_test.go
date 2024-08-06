@@ -46,3 +46,23 @@ func TestGetBooks(t *testing.T) {
 	// Assert that the response body is as expected
 	assert.Equal(t, expectedBooks, responseBooks)
 }
+
+// TestBookById tests the /books/:id endpoint
+func TestBookById(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.Default()
+	router.GET("/books/:id", bookById)
+
+	req, _ := http.NewRequest(http.MethodGet, "/books/1", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	expectedBook := book{ID: "1", Title: "In Search of Lost Time", Author: "Marcel Proust", Quantity: 2}
+
+	var responseBook book
+	err := json.Unmarshal(w.Body.Bytes(), &responseBook)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedBook, responseBook)
+}
