@@ -115,7 +115,7 @@ func checkoutBook(c *gin.Context) {
 // @Success 200 {object} book
 // @Failure 400 {object} ErrorResponse
 // @Failure 404 {object} ErrorResponse
-// @Router /checkout [put]
+// @Router /return [put]
 func returnBook(c *gin.Context) {
 	id, ok := c.GetQuery("id")
 

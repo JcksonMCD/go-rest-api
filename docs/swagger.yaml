@@ -90,6 +90,35 @@ paths:
     put:
       consumes:
       - application/json
+      description: Decrease the quantity of a book when checked out
+      parameters:
+      - description: Book ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Checkout a book
+      tags:
+      - Books
+  /return:
+    put:
+      consumes:
+      - application/json
       description: Incrase the quantity of a book when returned
       parameters:
       - description: Book ID
