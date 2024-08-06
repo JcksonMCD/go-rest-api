@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type book struct {
@@ -110,5 +111,6 @@ func main() {
 	router.POST("/books", createBook)
 	router.PUT("/checkout", checkoutBook)
 	router.PUT("/return", returnBook)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run("localhost:8080")
 }
