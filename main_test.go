@@ -110,3 +110,23 @@ func TestCheckoutBook(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, expectedBook, responseBook)
 }
+
+// TestReturnBook tests the /return endpoint
+func TestReturnBook(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.Default()
+	router.PUT("/return", returnBook)
+
+	req, _ := http.NewRequest(http.MethodPut, "/return?id=1", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	expectedBook := book{ID: "1", Title: "In Search of Lost Time", Author: "Marcel Proust", Quantity: 3}
+
+	var responseBook book
+	err := json.Unmarshal(w.Body.Bytes(), &responseBook)
+	assert.NoError(t, err)
+	assert.Equal(t, expectedBook, responseBook)
+}
