@@ -19,6 +19,10 @@ type book struct {
 	Quantity int    `json:"quantity"`
 }
 
+type ErrorResponse struct {
+	Message string `json:"message"`
+}
+
 // Data for API as not connecting to a db for this api.
 var books = []book{
 	{ID: "1", Title: "In Search of Lost Time", Author: "Marcel Proust", Quantity: 2},
