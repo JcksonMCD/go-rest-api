@@ -102,6 +102,16 @@ func checkoutBook(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, book)
 }
 
+// @Summary Return a book
+// @Description Incrase the quantity of a book when returned
+// @Tags Books
+// @Accept  json
+// @Produce  json
+// @Param id query string true "Book ID"
+// @Success 200 {object} book
+// @Failure 400 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /checkout [put]
 func returnBook(c *gin.Context) {
 	id, ok := c.GetQuery("id")
 
