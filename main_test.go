@@ -1,11 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
 )
 
 // TestGetBooks tests the /books endpoint
@@ -27,14 +29,20 @@ func TestGetBooks(t *testing.T) {
 	router.ServeHTTP(w, req)
 
 	// Assert that the status code is 200 OK
-	if w.Code != http.StatusOK {
-		t.Errorf("Expected status code %d, but got %d", http.StatusOK, w.Code)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	// Define the expected books
+	expectedBooks := []book{
+		{ID: "1", Title: "In Search of Lost Time", Author: "Marcel Proust", Quantity: 2},
+		{ID: "2", Title: "The Great Gatsby", Author: "F. Scott Fitzgerald", Quantity: 5},
+		{ID: "3", Title: "War and Peace", Author: "Leo Tolstoy", Quantity: 6},
 	}
 
+	// Unmarshal the response body
+	var responseBooks []book
+	err := json.Unmarshal(w.Body.Bytes(), &responseBooks)
+	assert.NoError(t, err)
+
 	// Assert that the response body is as expected
-	expected := `[{"id":"1","title":"In Search of Lost Time","author":"Marcel Proust","quantity":2},{"id":"2","title":"The Great Gatsby","author":"F. Scott Fitzgerald","quantity":5},{"id":"3","title":"War and Peace","author":"Leo Tolstoy","quantity":6}]
-		`
-	if w.Body.String() != expected {
-		t.Errorf("Expected body %s, but got %s", expected, w.Body.String())
-	}
+	assert.Equal(t, expectedBooks, responseBooks)
 }
