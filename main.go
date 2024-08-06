@@ -68,6 +68,15 @@ func getBookById(id string) (*book, error) {
 	return nil, errors.New("book not found")
 }
 
+// @Summary Create a new book
+// @Description Add a new book to the library
+// @Tags Books
+// @Accept  json
+// @Produce  json
+// @Param book body book true "Book data"
+// @Success 201 {object} book
+// @Failure 400 {object} ErrorResponse
+// @Router /books [post]
 func checkoutBook(c *gin.Context) {
 	id, ok := c.GetQuery("id")
 
